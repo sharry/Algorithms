@@ -9,9 +9,19 @@
 #include <math.h>
 #include <string>
 #include <assert.h>
+#include <valarray>
+#include <regex>
 
-#define DESC true
-#define ASC false
+#define never -1
+
+struct PolynomialFormatter
+{
+	bool descending_order = true;
+	int show_braces = 2;		  // Show exponent inside curly braces if its length >= this value
+	bool enable_fractions = true; // enable conversion of non-integers to fractions
+	int fractions_cycles = 10;
+	double fractions_precision = 5e-4;
+};
 
 class Polynomial
 {
@@ -37,7 +47,13 @@ private:
 		}
 		std::tuple<double, int> define(std::string input)
 		{
-			std::remove(input.begin(), input.end(), ' ');
+			input.erase(std::remove(input.begin(), input.end(), ' '), input.end());
+			input.erase(std::remove(input.begin(), input.end(), '*'), input.end());
+			input.erase(std::remove(input.begin(), input.end(), '{'), input.end());
+			input.erase(std::remove(input.begin(), input.end(), '}'), input.end());
+			input.erase(std::remove(input.begin(), input.end(), '('), input.end());
+			input.erase(std::remove(input.begin(), input.end(), ')'), input.end());
+
 			double c;
 			int d;
 			if (input.find("x") != std::string::npos)
@@ -58,7 +74,16 @@ private:
 				}
 				try
 				{
-					c = std::stod(coeff.str());
+					if (coeff.str().find("/") != std::string::npos)
+					{
+						std::string s = coeff.str();
+						size_t delim_pos = s.find("/");
+						std::string numer = s.substr(0, delim_pos);
+						std::string denom = s.substr(delim_pos + 1, s.length());
+						c = std::stod(numer) / std::stod(denom);
+					}
+					else
+						c = std::stod(coeff.str());
 				}
 				catch (const std::exception &)
 				{
@@ -81,7 +106,15 @@ private:
 				d = 0;
 				try
 				{
-					c = std::stod(input);
+					if (input.find("/") != std::string::npos)
+					{
+						size_t delim_pos = input.find("/");
+						std::string numer = input.substr(0, delim_pos);
+						std::string denom = input.substr(delim_pos + 1, input.length());
+						c = std::stod(numer) / std::stod(denom);
+					}
+					else
+						c = std::stod(input);
 				}
 				catch (const std::exception &e)
 				{
@@ -124,6 +157,32 @@ private:
 			mono->next->prev = mono->prev;
 			delete mono;
 		}
+	}
+	std::string to_fraction(double number, int cycles, double precision)
+	{
+		std::ostringstream output;
+		int sign = number > 0 ? 1 : -1;
+		number = number * sign; // abs(number);
+		double new_number, whole_part;
+		double decimal_part = number - (int)number;
+		int counter = 0;
+
+		std::valarray<double> vec_1{double((int)number), 1}, vec_2{1, 0}, temporary;
+
+		while (decimal_part > precision & counter < cycles)
+		{
+			new_number = 1 / decimal_part;
+			whole_part = (int)new_number;
+
+			temporary = vec_1;
+			vec_1 = whole_part * vec_1 + vec_2;
+			vec_2 = temporary;
+
+			decimal_part = new_number - whole_part;
+			counter += 1;
+		}
+		output << sign * vec_1[0] << '/' << vec_1[1];
+		return output.str();
 	}
 
 public:
@@ -292,7 +351,7 @@ public:
 		}
 		return res;
 	}
-	std::string to_string(bool desc = true)
+	std::string to_string(PolynomialFormatter options = {})
 	{
 		std::ostringstream out;
 		if (!this->head)
@@ -300,7 +359,7 @@ public:
 			out << 0;
 			return out.str();
 		}
-		auto curr = (desc ? this->tail : this->head);
+		auto curr = (options.descending_order ? this->tail : this->head);
 		bool first = true;
 		while (curr)
 		{
@@ -315,8 +374,25 @@ public:
 
 				// Coeff
 				auto abs = std::abs(curr->coeff);
+				bool integer = (abs - (int)abs) == 0;
 				if (abs != 1 || curr->degree == 0)
-					out << abs;
+				{
+					if (options.enable_fractions)
+					{
+						if (integer)
+							out << abs;
+						else
+						{
+							out << '(' << to_fraction(abs, options.fractions_cycles, options.fractions_precision) << ")";
+							if (curr->degree != 0)
+							{
+								out << '*';
+							}
+						}
+					}
+					else
+						out << abs;
+				}
 				// x
 				if (curr->degree != 0)
 				{
@@ -324,12 +400,15 @@ public:
 					if (curr->degree != 1)
 					{
 						out << '^';
-						out << curr->degree;
+						if (options.show_braces <= std::to_string(curr->degree).length())
+							out << '{' << curr->degree << '}';
+						else
+							out << curr->degree;
 					}
 				}
 				first = false;
 			}
-			curr = (desc ? curr->prev : curr->next);
+			curr = (options.descending_order ? curr->prev : curr->next);
 		}
 		return out.str();
 	}
