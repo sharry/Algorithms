@@ -112,11 +112,11 @@ public:
         if (this)
         {
             auto occ = this->occ;
+            auto left = this->left->to_vector();
+            vect.insert(vect.end(), left.begin(), left.end());
             while (occ--)
                 vect.push_back(this->data);
-            auto left = this->left->to_vector();
             auto right = this->right->to_vector();
-            vect.insert(vect.end(), left.begin(), left.end());
             vect.insert(vect.end(), right.begin(), right.end());
         }
         return vect;
