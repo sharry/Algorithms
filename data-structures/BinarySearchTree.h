@@ -164,6 +164,7 @@ public:
         sum += this->right->sum();
         return sum;
     }
+
     T min()
     {
         auto curr = this;
