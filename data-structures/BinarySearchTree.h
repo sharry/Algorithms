@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <math.h>
 
 template <typename T>
 class BST
@@ -156,7 +157,7 @@ public:
     }
     T sum()
     {
-        int sum = 0;
+        T sum = 0;
         if (!this)
             return 0;
         sum += this->data * this->occ;
@@ -164,7 +165,16 @@ public:
         sum += this->right->sum();
         return sum;
     }
-
+    T prod()
+    {
+        T prod = 1;
+        if (!this)
+            return 1;
+        prod *= std::pow(this->data, this->occ);
+        prod *= this->left->prod();
+        prod *= this->right->prod();
+        return prod;
+    }
     T min()
     {
         auto curr = this;
