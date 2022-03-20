@@ -301,8 +301,6 @@ public:
 	T at(int index)
 	{
 		int n = this->count();
-		if ((index < 0 ? -1 * index : index) >= n)
-			throw std::invalid_argument("Index out of range");
 		index = index % n % n;
 		int currIndex = 0;
 		auto curr = this->head;
