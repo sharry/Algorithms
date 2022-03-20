@@ -154,7 +154,7 @@ public:
             return this->occ;
         return 0;
     }
-    int sum()
+    T sum()
     {
         int sum = 0;
         if (!this)
