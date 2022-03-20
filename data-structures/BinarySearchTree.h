@@ -96,6 +96,15 @@ public:
 
         this->right->inorder();
     }
+    size_t count()
+    {
+        size_t count = this->occ;
+        if (this->left)
+            count += this->left->count();
+        if (this->right)
+            count += this->right->count();
+        return count;
+    }
     bool has(T val)
     {
         if (this->data > val && this->left)
