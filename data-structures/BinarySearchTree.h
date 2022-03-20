@@ -3,6 +3,7 @@
 // Deleting : Beggining: O(h) Middle & End: O(h)
 
 #pragma once
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -13,15 +14,21 @@ template <typename T>
 class BST
 {
 private:
+    // The actual data stored in the node
     T data;
+    // Occurrence tracker for a datum
     size_t occ;
+    // Pointer the the left tree
     BST *left;
+    // Pointer the the right tree
     BST *right;
 
 public:
     // Constructors
     BST() : data(0), occ(0), left(nullptr), right(nullptr) {}
     BST(T val) : data(val), occ(1), left(nullptr), right(nullptr) {}
+
+    // Insert a value to the tree
     void insert(T val)
     {
         if (this->occ == 0)
@@ -45,6 +52,8 @@ public:
         else
             this->occ++;
     }
+
+    // Remove a value from the tree
     void remove(T val)
     {
         if (this->occ == 0)
@@ -87,6 +96,8 @@ public:
             }
         }
     }
+
+    // Print the elements of the tree in ascending order
     void inorder()
     {
         if (!this)
@@ -98,6 +109,8 @@ public:
 
         this->right->inorder();
     }
+
+    // Returns a string from the elements of the tree
     std::string to_string(std::string seperator = "\n")
     {
         std::ostringstream strm;
@@ -111,6 +124,8 @@ public:
         }
         return strm.str();
     }
+
+    // Get the elements count
     size_t count()
     {
         size_t count = this->occ;
@@ -120,6 +135,8 @@ public:
             count += this->right->count();
         return count;
     }
+
+    // Search for a value in the tree
     bool has(T val)
     {
         if (this->data > val && this->left)
@@ -130,6 +147,8 @@ public:
             return true;
         return false;
     }
+
+    // Returns a vector from the elements of the tree
     std::vector<T> to_vector()
     {
         std::vector<T> vect;
@@ -145,6 +164,8 @@ public:
         }
         return vect;
     }
+
+    // Get how many an element occur in the tree
     size_t occurrencesOf(T val)
     {
         if (this->data > val && this->left)
@@ -155,6 +176,8 @@ public:
             return this->occ;
         return 0;
     }
+
+    // Sum (addition) of all the element of the tree
     T sum()
     {
         T sum = 0;
@@ -165,6 +188,8 @@ public:
         sum += this->right->sum();
         return sum;
     }
+
+    // Product (multiplication) of all the element of the tree
     T prod()
     {
         T prod = 1;
@@ -175,6 +200,8 @@ public:
         prod *= this->right->prod();
         return prod;
     }
+
+    // Minimum value in the tree
     T min()
     {
         auto curr = this;
@@ -182,6 +209,8 @@ public:
             curr = curr->left;
         return curr->data;
     }
+
+    // Maximum value in the tree
     T max()
     {
         auto curr = this;
