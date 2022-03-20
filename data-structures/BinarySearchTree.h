@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sstream>
 
 template <typename T>
 class BST
@@ -95,6 +96,19 @@ public:
             std::cout << this->data << std::endl;
 
         this->right->inorder();
+    }
+    std::string to_string(std::string seperator = "\n")
+    {
+        std::ostringstream strm;
+        if (this)
+        {
+            strm << this->left->to_string(seperator);
+            auto occ = this->occ;
+            while (occ--)
+                strm << this->data << seperator;
+            strm << this->right->to_string(seperator);
+        }
+        return strm.str();
     }
     size_t count()
     {
