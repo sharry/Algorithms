@@ -5,6 +5,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <vector>
 
 template <typename T>
 class BST
@@ -18,38 +19,38 @@ private:
 public:
     // Constructors
     BST() : data(0), occ(0), left(nullptr), right(nullptr) {}
-    BST(T e) : data(e), occ(1), left(nullptr), right(nullptr) {}
-    void insert(T e)
+    BST(T val) : data(val), occ(1), left(nullptr), right(nullptr) {}
+    void insert(T val)
     {
         if (this->occ == 0)
         {
-            this->data = e;
+            this->data = val;
             this->occ = 1;
             return;
         }
-        if (this->data < e)
+        if (this->data < val)
         {
             if (!this->right)
                 this->right = new BST<T>();
-            this->right->insert(e);
+            this->right->insert(val);
         }
-        else if (this->data > e)
+        else if (this->data > val)
         {
             if (!this->left)
                 this->left = new BST<T>();
-            this->left->insert(e);
+            this->left->insert(val);
         }
         else
             this->occ++;
     }
-    void remove(T e)
+    void remove(T val)
     {
         if (this->occ == 0)
             return;
-        if (this->data < e && this->right)
-            this->right->remove(e);
-        else if (this->data > e && this->left)
-            this->left->remove(e);
+        if (this->data < val && this->right)
+            this->right->remove(val);
+        else if (this->data > val && this->left)
+            this->left->remove(val);
         else
         {
             if (this->occ > 1)
@@ -60,7 +61,7 @@ public:
 
             if (!this->left && !this->right)
             {
-                // Should do better
+                // I need to do better (but it works)
                 this->occ = 0;
                 this->data = 0;
             }
@@ -95,6 +96,51 @@ public:
 
         this->right->inorder();
     }
+    bool has(T val)
+    {
+        if (this->data > val && this->left)
+            return this->left->has(val);
+        else if (this->data < val && this->right)
+            return this->right->has(val);
+        else if (this->data == val)
+            return true;
+        return false;
+    }
+    std::vector<T> to_vector()
+    {
+        std::vector<T> vect;
+        if (this)
+        {
+            auto occ = this->occ;
+            while (occ--)
+                vect.push_back(this->data);
+            auto left = this->left->to_vector();
+            auto right = this->right->to_vector();
+            vect.insert(vect.end(), left.begin(), left.end());
+            vect.insert(vect.end(), right.begin(), right.end());
+        }
+        return vect;
+    }
+    size_t occurrencesOf(T val)
+    {
+        if (this->data > val && this->left)
+            return this->left->occurrencesOf(val);
+        if (this->data < val && this->right)
+            return this->right->occurrencesOf(val);
+        if (this->data == val)
+            return this->occ;
+        return 0;
+    }
+    int sum()
+    {
+        int sum = 0;
+        if (!this)
+            return 0;
+        sum += this->data * this->occ;
+        sum += this->left->sum();
+        sum += this->right->sum();
+        return sum;
+    }
     T min()
     {
         auto curr = this;
@@ -108,15 +154,5 @@ public:
         while (curr && curr->right)
             curr = curr->right;
         return curr->data;
-    }
-    bool has(T val)
-    {
-        if (this->data > val && this->left)
-            return this->left->has(val);
-        else if (this->data < val && this->right)
-            return this->right->has(val);
-        else if (this->data == val)
-            return true;
-        return false;
     }
 };
