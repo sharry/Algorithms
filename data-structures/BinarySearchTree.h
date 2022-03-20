@@ -109,4 +109,14 @@ public:
             curr = curr->right;
         return curr->data;
     }
+    bool has(T val)
+    {
+        if (this->data > val && this->left)
+            return this->left->has(val);
+        else if (this->data < val && this->right)
+            return this->right->has(val);
+        else if (this->data == val)
+            return true;
+        return false;
+    }
 };
