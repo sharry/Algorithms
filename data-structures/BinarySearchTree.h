@@ -218,4 +218,13 @@ public:
             curr = curr->right;
         return curr->data;
     }
+
+    // Height of the tree
+    size_t height()
+    {
+        if (!this || !this->occ)
+            return 0;
+        else
+            return 1 + std::max(this->left->height(), this->right->height());
+    }
 };
