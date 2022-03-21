@@ -97,19 +97,6 @@ public:
         }
     }
 
-    // Print the elements of the tree in ascending order
-    void inorder()
-    {
-        if (!this)
-            return;
-        this->left->inorder();
-        size_t occ = this->occ;
-        while (occ--)
-            std::cout << this->data << std::endl;
-
-        this->right->inorder();
-    }
-
     // Returns a string from the elements of the tree
     std::string to_string(std::string seperator = "\n")
     {
