@@ -36,7 +36,7 @@ private:
 
 	// push method helpers
 	void push() {}
-	void _push(T val)
+	void _push_(T val)
 	{
 		Node *node = new Node(val);
 		if (!this->head)
@@ -130,7 +130,7 @@ public:
 	template <typename First, typename... Rest>
 	void push(const First &first, const Rest &...rest)
 	{
-		_push(first);
+		_push_(first);
 		push(rest...);
 	}
 	// Delete the last element and return its value (Stack)

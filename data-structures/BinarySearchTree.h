@@ -33,7 +33,7 @@ private:
     }
 
     // insert method helpers
-    void _insert(T val)
+    void _insert_(T val)
     {
         if (this->occ == 0)
         {
@@ -45,13 +45,13 @@ private:
         {
             if (!this->right)
                 this->right = new BST<T>();
-            this->right->_insert(val);
+            this->right->_insert_(val);
         }
         else if (this->data > val)
         {
             if (!this->left)
                 this->left = new BST<T>();
-            this->left->_insert(val);
+            this->left->_insert_(val);
         }
         else
             this->occ++;
@@ -59,14 +59,14 @@ private:
     void insert() {}
 
     // remove method helpers
-    void _remove(T val)
+    void _remove_(T val)
     {
         if (!this || this->occ == 0)
             return;
         if (this->data < val && this->has_right())
-            this->right->_remove(val);
+            this->right->_remove_(val);
         else if (this->data > val && this->has_left())
-            this->left->_remove(val);
+            this->left->_remove_(val);
         else if (val == this->data)
         {
             if (this->occ > 1)
@@ -104,7 +104,7 @@ private:
                 this->data = min;
                 auto occ = this->right->occurrencesOf(min);
                 this->occ = occ;
-                this->right->_remove(min);
+                this->right->_remove_(min);
             }
         }
     }
@@ -119,7 +119,7 @@ public:
     template <typename First, typename... Rest>
     void insert(const First &first, const Rest &...rest)
     {
-        _insert(first);
+        _insert_(first);
         insert(rest...);
     }
 
@@ -127,7 +127,7 @@ public:
     template <typename First, typename... Rest>
     void remove(const First &first, const Rest &...rest)
     {
-        _remove(first);
+        _remove_(first);
         remove(rest...);
     }
 
