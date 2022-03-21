@@ -50,29 +50,16 @@ private:
     }
     void insert() {}
 
-public:
-    // Constructors
-    BST() : data(0), occ(0), left(nullptr), right(nullptr) {}
-    BST(T val) : data(val), occ(1), left(nullptr), right(nullptr) {}
-
-    // Insert values to the tree
-    template <typename First, typename... Rest>
-    void insert(const First &first, const Rest &...rest)
+    // remove method helpers
+    void _remove(T val)
     {
-        _insert(first);
-        insert(rest...);
-    }
-
-    // Remove a value from the tree
-    void remove(T val)
-    {
-        if (this->occ == 0)
+        if (!this || this->occ == 0)
             return;
         if (this->data < val && this->right)
-            this->right->remove(val);
+            this->right->_remove(val);
         else if (this->data > val && this->left)
-            this->left->remove(val);
-        else
+            this->left->_remove(val);
+        else if (val == this->data)
         {
             if (this->occ > 1)
             {
@@ -82,7 +69,6 @@ public:
 
             if (!this->left && !this->right)
             {
-                // I need to do better (but it works)
                 this->occ = 0;
                 this->data = 0;
             }
@@ -108,9 +94,31 @@ public:
             {
                 auto min = this->right->min();
                 this->data = min;
-                this->right->remove(min);
+                this->right->_remove(min);
             }
         }
+    }
+    void remove() {}
+
+public:
+    // Constructors
+    BST() : data(0), occ(0), left(nullptr), right(nullptr) {}
+    BST(T val) : data(val), occ(1), left(nullptr), right(nullptr) {}
+
+    // Insert values to the tree
+    template <typename First, typename... Rest>
+    void insert(const First &first, const Rest &...rest)
+    {
+        _insert(first);
+        insert(rest...);
+    }
+
+    // Remove a value from the tree
+    template <typename First, typename... Rest>
+    void remove(const First &first, const Rest &...rest)
+    {
+        _remove(first);
+        remove(rest...);
     }
 
     // Returns a string from the elements of the tree
