@@ -12,6 +12,7 @@
 #include <cmath>
 #include <string>
 #include <sstream>
+#include <vector>
 
 template <typename T>
 class LinkedList
@@ -32,6 +33,33 @@ private:
 	};
 	Node *head;
 	size_t _count;
+
+	// push method helpers
+	void push() {}
+	void _push(T val)
+	{
+		Node *node = new Node(val);
+		if (!this->head)
+		{
+			this->head = node;
+			this->_count++;
+			return;
+		}
+		auto curr = this->head;
+		while (curr)
+		{
+			if (!curr->next)
+			{
+				curr->next = node;
+				this->_count++;
+				return;
+			}
+			curr = curr->next;
+		}
+	}
+
+	// enqueue method helpers
+	void enqueue() {}
 
 public:
 	// Constructors
@@ -99,26 +127,11 @@ public:
 		return c;
 	}
 	// Append to the end of the list (Stack)
-	void push(T val)
+	template <typename First, typename... Rest>
+	void push(const First &first, const Rest &...rest)
 	{
-		Node *node = new Node(val);
-		if (!this->head)
-		{
-			this->head = node;
-			this->_count++;
-			return;
-		}
-		auto curr = this->head;
-		while (curr)
-		{
-			if (!curr->next)
-			{
-				curr->next = node;
-				this->_count++;
-				return;
-			}
-			curr = curr->next;
-		}
+		_push(first);
+		push(rest...);
 	}
 	// Delete the last element and return its value (Stack)
 	T pop()
@@ -149,9 +162,11 @@ public:
 		this->_count--;
 	}
 	// Add to beginning of the list (Queue)
-	void enqueue(T val)
+	template <typename First, typename... Rest>
+	void enqueue(const First &first, const Rest &...rest)
 	{
-		this->insertAt(0, val);
+		this->insertAt(0, first);
+		enqueue(rest...);
 	}
 	// Delete the last element and return its value (Queue)
 	T dequeue()
@@ -428,18 +443,18 @@ public:
 		this->_count += list->count();
 	}
 	// Convert the list to an array
-	T *toArray()
+	std::vector<T> to_vector()
 	{
 		auto curr = this->head;
-		T *arr = new T[this->count()];
+		std::vector<T> vect;
 		size_t i = 0;
 		while (curr)
 		{
-			arr[i] = curr->value;
+			vect.push_back(curr->value);
 			curr = curr->next;
 			i++;
 		}
-		return arr;
+		return vect;
 	}
 	// Shift the list with given offset, positive offset shifts forward
 	void shift(int offset = 1)

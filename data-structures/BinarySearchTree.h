@@ -9,7 +9,6 @@
 #include <vector>
 #include <sstream>
 #include <math.h>
-#include <cstdarg>
 
 template <typename T>
 class BST
