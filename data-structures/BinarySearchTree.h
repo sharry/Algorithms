@@ -89,14 +89,20 @@ public:
             else if (!this->left)
             {
                 this->data = this->right->data;
+                auto right = this->right->right;
+                auto left = this->right->left;
                 delete this->right;
-                this->right = nullptr;
+                this->right = right;
+                this->left = left;
             }
             else if (!this->right)
             {
                 this->data = this->left->data;
+                auto right = this->left->right;
+                auto left = this->left->left;
                 delete this->left;
-                this->left = nullptr;
+                this->right = right;
+                this->left = left;
             }
             else
             {
