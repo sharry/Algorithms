@@ -9,6 +9,7 @@
 #include <vector>
 #include <sstream>
 #include <math.h>
+#include <cstdarg>
 
 template <typename T>
 class BST
@@ -23,13 +24,8 @@ private:
     // Pointer the the right tree
     BST *right;
 
-public:
-    // Constructors
-    BST() : data(0), occ(0), left(nullptr), right(nullptr) {}
-    BST(T val) : data(val), occ(1), left(nullptr), right(nullptr) {}
-
-    // Insert a value to the tree
-    void insert(T val)
+    // insert method helpers
+    void _insert(T val)
     {
         if (this->occ == 0)
         {
@@ -41,16 +37,30 @@ public:
         {
             if (!this->right)
                 this->right = new BST<T>();
-            this->right->insert(val);
+            this->right->_insert(val);
         }
         else if (this->data > val)
         {
             if (!this->left)
                 this->left = new BST<T>();
-            this->left->insert(val);
+            this->left->_insert(val);
         }
         else
             this->occ++;
+    }
+    void insert() {}
+
+public:
+    // Constructors
+    BST() : data(0), occ(0), left(nullptr), right(nullptr) {}
+    BST(T val) : data(val), occ(1), left(nullptr), right(nullptr) {}
+
+    // Insert values to the tree
+    template <typename First, typename... Rest>
+    void insert(const First &first, const Rest &...rest)
+    {
+        _insert(first);
+        insert(rest...);
     }
 
     // Remove a value from the tree
