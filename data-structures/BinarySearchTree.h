@@ -24,6 +24,15 @@ private:
     // Pointer the the right tree
     BST *right;
 
+    bool has_right()
+    {
+        return this->right && this->right->occ != 0;
+    }
+    bool has_left()
+    {
+        return this->left && this->left->occ != 0;
+    }
+
     // insert method helpers
     void _insert(T val)
     {
@@ -55,9 +64,9 @@ private:
     {
         if (!this || this->occ == 0)
             return;
-        if (this->data < val && this->right)
+        if (this->data < val && this->has_right())
             this->right->_remove(val);
-        else if (this->data > val && this->left)
+        else if (this->data > val && this->has_left())
             this->left->_remove(val);
         else if (val == this->data)
         {
@@ -67,12 +76,12 @@ private:
                 return;
             }
 
-            if (!this->left && !this->right)
+            if (!this->has_left() && !this->has_right())
             {
                 this->occ = 0;
                 this->data = 0;
             }
-            else if (!this->left)
+            else if (!this->has_left())
             {
                 this->data = this->right->data;
                 auto right = this->right->right;
@@ -81,7 +90,7 @@ private:
                 this->right = right;
                 this->left = left;
             }
-            else if (!this->right)
+            else if (!this->has_right())
             {
                 this->data = this->left->data;
                 auto right = this->left->right;
@@ -94,6 +103,8 @@ private:
             {
                 auto min = this->right->min();
                 this->data = min;
+                auto occ = this->right->occurrencesOf(min);
+                this->occ = occ;
                 this->right->_remove(min);
             }
         }
