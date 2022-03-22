@@ -34,7 +34,6 @@ private:
 	Node *head;
 	size_t _count;
 
-protected:
 	// push method helpers
 	void push() {}
 	void _push_(T val)
@@ -545,13 +544,4 @@ public:
 		}
 		return sum;
 	}
-};
-
-template <typename T>
-class Stack : private LinkedList<T>
-{
-public:
-	using LinkedList<T>::pop;
-	using LinkedList<T>::push;
-	using LinkedList<T>::join;
 };
