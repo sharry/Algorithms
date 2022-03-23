@@ -10,7 +10,7 @@
 #include <sstream>
 #include <math.h>
 
-template <typename T>
+template <typename T = int>
 class BST
 {
 private:
@@ -23,11 +23,11 @@ private:
     // Pointer the the right tree
     BST *right;
 
-    bool has_right()
+    bool has_right() const
     {
         return this->right && this->right->occ != 0;
     }
-    bool has_left()
+    bool has_left() const
     {
         return this->left && this->left->occ != 0;
     }
@@ -132,7 +132,7 @@ public:
     }
 
     // Returns a string from the elements of the tree
-    std::string to_string(std::string seperator = "\n")
+    std::string to_string(std::string seperator = "\n") const
     {
         std::ostringstream strm;
         if (this)
@@ -147,7 +147,7 @@ public:
     }
 
     // Get the elements count
-    size_t count()
+    size_t count() const
     {
         size_t count = this->occ;
         if (this->left)
@@ -158,7 +158,7 @@ public:
     }
 
     // Search for a value in the tree
-    bool has(T val)
+    bool has(T val) const
     {
         if (this->data > val && this->left)
             return this->left->has(val);
@@ -170,7 +170,7 @@ public:
     }
 
     // Returns a vector from the elements of the tree
-    std::vector<T> to_vector()
+    std::vector<T> to_vector() const
     {
         std::vector<T> vect;
         if (this)
@@ -187,7 +187,7 @@ public:
     }
 
     // Get how many an element occur in the tree
-    size_t occurrencesOf(T val)
+    size_t occurrencesOf(T val) const
     {
         if (this->data > val && this->left)
             return this->left->occurrencesOf(val);
@@ -198,8 +198,8 @@ public:
         return 0;
     }
 
-    // Sum (addition) of all the element of the tree
-    T sum()
+    // Get the sum of all the element of the tree
+    T sum() const
     {
         T sum = 0;
         if (!this)
@@ -210,8 +210,8 @@ public:
         return sum;
     }
 
-    // Product (multiplication) of all the element of the tree
-    T prod()
+    // Get the product of all the element of the tree
+    T prod() const
     {
         T prod = 1;
         if (!this)
@@ -223,7 +223,7 @@ public:
     }
 
     // Minimum value in the tree
-    T min()
+    T min() const
     {
         auto curr = this;
         while (curr && curr->left)
@@ -232,7 +232,7 @@ public:
     }
 
     // Maximum value in the tree
-    T max()
+    T max() consts
     {
         auto curr = this;
         while (curr && curr->right)
@@ -241,7 +241,7 @@ public:
     }
 
     // Height of the tree
-    size_t height()
+    size_t height() const
     {
         if (!this || !this->occ)
             return 0;

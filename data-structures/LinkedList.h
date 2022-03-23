@@ -14,7 +14,7 @@
 #include <sstream>
 #include <vector>
 
-template <typename T>
+template <typename T = int>
 class LinkedList
 {
 private:
@@ -109,12 +109,12 @@ public:
 		}
 	}
 	// Count the total number of elements
-	size_t count()
+	size_t count() const
 	{
 		return _count;
 	}
 	// Count the number of occurrences of an element
-	size_t occurrencesCount(T val)
+	size_t occurrencesCount(T val) const
 	{
 		size_t c = 0;
 		auto curr = this->head;
@@ -277,7 +277,7 @@ public:
 		}
 	}
 	// Position of the first node with the value val
-	int positionOfFirst(T val)
+	int positionOfFirst(T val) const
 	{
 		size_t pos = 0;
 		auto curr = this->head;
@@ -291,7 +291,7 @@ public:
 		return -1;
 	}
 	// All positions of nodes with the given value
-	size_t *positionsOf(T val)
+	size_t *positionsOf(T val) const
 	{
 		auto occ = this->occurrencesCount(val);
 		if (occ == 0)
@@ -313,7 +313,7 @@ public:
 		return positions;
 	}
 	// Value of the node at the given index
-	T at(int index)
+	T at(int index) const
 	{
 		int n = this->count();
 		index = index % n % n;
@@ -402,7 +402,7 @@ public:
 		}
 	}
 	// Retuns the minimum value in the list
-	T min()
+	T min() const
 	{
 		auto curr = this->head;
 		T minVal = curr->value;
@@ -415,7 +415,7 @@ public:
 		return minVal;
 	}
 	// Retuns the maximum value in the list
-	T max()
+	T max() const
 	{
 		auto curr = this->head;
 		T maxVal = curr->value;
@@ -443,7 +443,7 @@ public:
 		this->_count += list->count();
 	}
 	// Convert the list to an array
-	std::vector<T> to_vector()
+	std::vector<T> to_vector() const
 	{
 		auto curr = this->head;
 		std::vector<T> vect;
@@ -477,7 +477,7 @@ public:
 		}
 	}
 	// Adds all the elements of an array into a string, separated by the specified separator string
-	std::string join(const char *seperator)
+	std::string join(const char *seperator) const
 	{
 		std::ostringstream strm;
 		auto curr = this->head;
@@ -491,7 +491,7 @@ public:
 		return strm.str();
 	}
 	// Check whether the list has an element with the given value
-	bool has(T val)
+	bool has(T val) const
 	{
 		auto curr = this->head;
 		while (curr)
@@ -521,7 +521,7 @@ public:
 		}
 	}
 	// Retuns the sum of the list elements
-	T sum()
+	T sum() const
 	{
 		auto curr = this->head;
 		T sum = 0;
@@ -533,7 +533,7 @@ public:
 		return sum;
 	}
 	// Retuns the product of the list elements
-	T prod()
+	T prod() const
 	{
 		auto curr = this->head;
 		T sum = 1;
