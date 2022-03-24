@@ -24,13 +24,9 @@ private:
 
     // push() method helpers
     void _push_(T element)
+
     {
         Node *node = new Node(element);
-        if (!head)
-        {
-            head = node;
-            return;
-        }
         node->next = head;
         head = node;
     }

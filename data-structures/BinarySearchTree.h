@@ -232,7 +232,7 @@ public:
     }
 
     // Maximum value in the tree
-    T max() consts
+    T max() const
     {
         auto curr = this;
         while (curr && curr->right)
