@@ -24,7 +24,6 @@ private:
 
     // push() method helpers
     void _push_(T element)
-
     {
         Node *node = new Node(element);
         node->next = head;
