@@ -1,3 +1,9 @@
+// Queue - FIFO data structure (First in first out)
+// Enqueue : O(1)
+// Dequeue : O(1)
+// Front : O(1)
+// Back : O(1)
+
 #pragma once
 
 #include <vector>

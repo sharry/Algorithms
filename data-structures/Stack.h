@@ -1,3 +1,8 @@
+// Stack - LIFO data structure (Last in first out)
+// Push : O(1)
+// Pop : O(1)
+// Peek : O(1)
+
 #pragma once
 
 #include <vector>
